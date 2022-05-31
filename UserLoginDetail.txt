@@ -1,6 +1,6 @@
 Username                                Password
 
-admin                                	123                  <- administrator Login
+admin                                	1234                  <- administrator Login
 
 
 rehansemri                              1234
