@@ -1,0 +1,82 @@
+{% include 'header.html' %} 
+{% block content %}
+{% endblock %}
+{% load static %}
+    <div class="container-fluid">
+        <main class="tm-main">
+            <!-- Search form -->
+            <div class="row tm-row">
+                <div class="col-12">
+                    <form method="GET" class="form-inline tm-mb-80 tm-search-form">                
+                        <input class="form-control tm-search-input" name="query" type="text" placeholder="Search..." aria-label="Search">
+                        <button class="tm-search-button" type="submit">
+                            <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+                        </button>                                
+                    </form>
+                </div>                
+            </div>            
+            <div class="row tm-row">
+                <div class="col-12">
+                    <hr class="tm-hr-primary tm-mb-55">
+                    <!-- Video player 1422x800 -->
+                    <img src="{{post.post_img.url}}" style="max-width: 600px;" class="tm-mb-40" alt="image">
+                </div>
+            </div>
+            <div class="row tm-row">
+                <div class="col-lg-8 tm-post-col">
+                    <div class="tm-post-full">                    
+                        <div class="mb-4">
+                            <h2 class="pt-2 tm-color-primary tm-post-title">{{post.title}}</h2>
+                            <p class="tm-mb-40">{{post.created_at}} posted by {{post.user}}</p>
+                            <p>{{post.desc}}</p>
+                            
+                        </div>
+                        
+                        <!-- Comments -->
+                        <div>
+                            <h2 class="tm-color-primary tm-post-title">Comments</h2>
+                            <hr class="tm-hr-primary tm-mb-45">
+                            {% for ct in post.comment_set.all %}
+                            <div class="tm-comment tm-mb-45">
+                                <figure class="tm-comment-figure">
+                                    <img src="{{ct.user.profilepic.url}}" alt="Image" style="max-width: 60px;" class="mb-2 rounded-circle img-thumbnail">
+                                    <figcaption class="tm-color-primary text-center">{{ct.user.name}}</figcaption>
+                                </figure>
+                                <div>
+                                    <p>{{ct.txt}}</p>
+                                    <div class="d-flex justify-content-between">
+                                       
+                                        <span class="tm-color-primary">{{ct.created_at}}</span>
+                                    </div>                                                 
+                                </div>                                
+                            </div>
+                            {% endfor %}
+                            {% if user.is_authenticated %}
+                            <form action="{% url 'comment' post.id %}" method="POST" class="mb-5 tm-comment-form">
+                                {% csrf_token %}
+                                <h2 class="tm-color-primary tm-post-title mb-4">Your comment</h2>
+                               
+                                <div class="mb-4">
+                                    <input class="form-control" name="txt" type="text">
+                                    <input class="form-control" name="current_path" value="{{request.get_full_path}}" type="hidden">
+                                </div>
+                                
+                                <div class="text-right">
+                                    <button class="tm-btn tm-btn-primary tm-btn-small" type="submit" >Submit</button>                        
+                                </div>                                
+                            </form>  
+                            {% else %}
+                            <p class="tm-pt-30">Login to Comment <a href="{% url 'login' %}" class="tm-color-primary">login</a></p>
+                            {% endif %}                       
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </main>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/templatemo-script.js"></script>
+</body>
+</html>

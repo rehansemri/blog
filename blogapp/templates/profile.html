@@ -1,0 +1,94 @@
+{% include 'header.html' %} 
+{% block content %}
+{% endblock %}
+{% load static %}
+
+<div class="container mt-5">
+    
+    <div class="row d-flex justify-content-center">
+        
+        <div class="col-md-7">
+            
+            <div class="card p-3 py-4">
+                
+                <div class="text-center">
+                    <img src="{{user_profile.profilepic.url}}" width="100" class="rounded-circle">
+                </div>
+                
+                <div class="text-center mt-3">
+                   
+                    <h5 class="mt-2 mb-0">{{user_profile.name}}</h5>
+                   
+                    
+                    <div class="px-4 mt-1">
+                        <p class="fonts">{{user_profile.bio}}</p>
+                    
+                    </div>
+                    
+               
+                    {{posts.all}}
+                </div>
+                </div>
+                <div class="row tm-row">
+                    {% for post in posts %}
+                    <article class="col-12 col-md-6 tm-post">
+                        <hr class="tm-hr-primary">
+                        <a href="" class="effect-lily tm-post-link tm-pt-60">
+                            <div class="tm-post-link-inner">
+                                
+                                <img src="{{post.post_img.url}}" alt="Image" class="img-fluid">                            
+                            </div>
+                             
+                          
+                            <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{post.title}}</h2>
+                        </a>                    
+                        <p class="tm-pt-30">{{post.desc|slice:":250"}}... <a href="{% url 'post' post.id %}" class="tm-color-primary">Read More</a></p>
+                        <div class="d-flex justify-content-between tm-pt-45">
+                            
+                            <span class="tm-color-primary">{{post.created_at}}</span>
+                        </div>
+                        <form action="{% url 'delete_post' post.id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                           
+                            <input class="form-control" name="current_path" value="{{request.get_full_path}}" type="hidden">
+                        <button type="submit" class="btn btn-danger">Delete Post</button>
+                    </form>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <span>{{post.comment_set.all.count}} comments</span>
+                            <span>by {{post.user}}</span>
+                        </div>
+                        {% endfor %}
+                    </article>
+                    
+                </div>
+                <div class="row tm-row tm-mt-100 tm-mb-75">
+                    <div class="tm-prev-next-wrapper">
+                        {% if posts.has_previous %}
+                        <a href="?page={{ posts.previous_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled tm-mr-20">Prev</a>
+                        {% endif %}
+                        {% if posts.has_next %}
+                        <a href="?page={{ posts.next_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next">Next</a>
+                        {% endif %}
+                    </div>
+                    <div class="tm-paging-wrapper">
+                        <span class="d-inline-block mr-3">Page</span>
+                        <nav class="tm-paging-nav d-inline-block">
+                            <ul>
+                                {% for i in posts.paginator.page_range %}
+                                 {% if posts.number == i %}
+                                <li class="tm-paging-item active">
+                                    <a href="?page={{ i }}" class="mb-2 tm-btn tm-paging-link">{{i}}</a>
+                                </li>
+                                {% else %}
+                                <li class="tm-paging-item">
+                                    <a href="?page={{ i }}" class="mb-2 tm-btn tm-paging-link">{{i}}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                
+                                
+                            </ul>
+                        </nav>
+                    </div>                
+                </div>

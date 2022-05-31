@@ -1,0 +1,11 @@
+Username                                Password
+
+admin                                	123                  <- administrator Login
+
+
+rehansemri                              1234
+
+
+Sonam                               	1234
+
+
